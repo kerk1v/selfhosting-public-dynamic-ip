@@ -54,7 +54,7 @@ I am assuming that you will run all commands as root or with ```sudo``` to have 
 5. Edit the file ```/etc/default/openvpn```. Uncomment the line ```AUTOSTART="all"```.
 6. Test the connection with the command ```openvpn --config /etc/openvpn/client.conf```. If you see ```Initialization Sequence Completed``` at the end, all is fine. Exit with ctrl+c.
 7. Now run the commands ```systemctl daemon-reload``` and ```systemctl start openvpn```.
-8. Check that the connection is established with the command ```ip a``` you should see eomething similar to this at the end: 
+8. Check that the connection is established with the command ```ip a``` you should see something similar to this at the end: 
     ```tun0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 500
     link/none 
     inet 10.8.0.10/24 scope global tun0
@@ -63,4 +63,26 @@ I am assuming that you will run all commands as root or with ```sudo``` to have 
        valid_lft forever preferred_lft forever
     inet6 fe80::d652:3673:e6ac:2d2b/64 scope link stable-privacy 
        valid_lft forever preferred_lft forever```
+    This means that you have sucessfully connected to the Cloud server.
+9. You can also test connectivity with the Cloud server with ```ping 10.8.0.1```. It should respond.
+
+### Back to the Cloud Server
+
+1. Test connectivity to the Homeserver: ```ping 10.8.0.10```. It should also respond. The ```tun0``` network interface should also be present if you check with ```ip a```.
+2. Install Docker on the Cloud server. I follow the official instructions here: https://docs.docker.com/engine/install/ubuntu/
+3. Install npm on the Cloud server: ```apt install npm -y```.
+4. Install CapRover on the Cloud server. Caprover is an easy-to-use PAAS (Platform-As-A-Service) that runs even on the most modest servers. I use it because it provides a lot of functions, like automatic SSL/HTTPS with free LetsEncrypt / ACME certificates. Read more about it here: https://caprover.com/
+```docker run -p 80:80 -p 443:443 -p 3000:3000 -e ACCEPTED_TERMS=true -v /var/run/docker.sock:/var/run/docker.sock -v /captain:/captain caprover/caprover```
+5. In the meantime, install the CapRover cli: ```npm install -g caprover```.
+6. Wait for a bit for CapRover to come up.
+7. Have the IP address of your Cloud server ready. Do the initial configuration of CapRover with the command ```caprover serversetup```. Answer all the questions. As the root domain enter <yourdomain.com>. Choose a secure password when prompted, and wait for about a minute after the command has completed.
+8. Navigate to https://captain.yourdomain.com. You should see this screen:
+![Screenshot 2023-12-18 at 18 42 45](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/e94a0398-4a3b-4435-990e-5b4df11ffdc2)
+9. If you successfully log in with the password that you set during step 7, you will see this screen:
+![Screenshot 2023-12-18 at 18 45 56](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/97cc708d-8f50-46b0-9763-c587e7923b61)
+
+OK, done here. Back to the Homeserver. 
+
+### At the Homeserver again
+
 
