@@ -26,7 +26,7 @@ Good, good, here are the steps, one by one...
     2. Add an IPv4 address. The state of IPv6 unfortunately is less than optimal, and many ISPs aren't giving out IPv6 addresses to their clients (yet).
     3. Set a hostname of captain.domain.com. More on that later. 
     4. Use an SSH-Key for logging in to the cloud instance. Not only is this more secure than password authetication, it's also much more convenient.
-        1. On OSX and Linux, check the directory  ~/.ssh for two files named ```id_rsa``` and ```id_rsa.pub```. If they are there, you're good to go. If not, use the command ```ssh-keygen``` to generate a keypair (these two files)
+        1. On OSX and Linux, check the directory  ~/.ssh for two files named `id_rsa` and `id_rsa.pub`. If they are there, you're good to go. If not, use the command ```ssh-keygen``` to generate a keypair (these two files)
         2. On Windows (10 and 11) you need to install the additional component called "SSH Client". After that, pretty much everything is the same as above.
         3. Upload the PUBLIC key into the Hetzner cloud server creation interface. Paste the contents of ``ìd_rsa.pub``` into that field, give it a memorable name and if you wish, check the box to make it the default key.
         4. Don't forget to save the keypair (``ìd_rsa``` and ``ìd_rsa.pub```) in a safe place in case you ever format your PC. 
