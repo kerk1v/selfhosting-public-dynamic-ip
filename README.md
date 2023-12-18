@@ -103,7 +103,7 @@ The first thing you need is a web application to share. Let's assume, for simpli
 ![Screenshot 2023-12-18 at 18 58 53](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/4b167624-dc7c-4f6d-a409-92c3b58644c1)
     1.  App Name: This will be the hostname part under which your app will be available, the complete URL will be https://<appname>.<yourdomain.com>. If you're not using a wildcard DNS entry, make sure you create the approprate DNS entry before hitting "Deploy" in step 4 below!
     2.  Version: leave this field alone for now. It is the version of the image from Dockerhub that will be used.
-    3.  Upstream address: This will always start with http://10.8.0.10 (the IP of the Homeserver on the OpenVPN connection) followed by the port number it's listening on (in our case, :3000).
+    3.  Upstream address: This will always start with http://10.8.0.10 (the IP of the Homeserver on the OpenVPN connection) followed by the port number the application is listening on (in our case, :3000).
     4.  Click "Deploy" at the bottom right of the page, and wait until it completes.
     5.  Now navigate to the "Apps" screen again. Your newly created app will be there. Click on the name, we have two more settings to adjust.
     6.  Click on the "Enable HTTPS" button. After some seconds, the button will be grayed out and the URL next to it will have changed to start with https://.
