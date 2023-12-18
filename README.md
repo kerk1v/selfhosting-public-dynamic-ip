@@ -3,9 +3,13 @@ How to self-host services on a Homeserver or Homelab and expose them to the publ
 
 ## The problem: 
 
-You have a load of services running on your Homeserver or Homelab? You have a decent Internet connection with high bandwidth but your ISP doesn't give you a static IP address, so you're either stuck with a dynamic IP. Or even worse, your ISP uses CGNAT (Carrier Grade Network Address Translation) so you don't have a public, routable IP address at all?  
+You have some services running on your Homeserver or Homelab? You have a decent Internet connection with high bandwidth but your ISP doesn't give you a static IP address, so you're either stuck with a dynamic IP and an DynDNS-like service. Or even worse, your ISP uses CGNAT (Carrier Grade Network Address Translation) so you don't have a public, routable IP address at all? 
 
-Fear no more, as you can make your services - and only the ones you chose - available from the internet for a handful of €uros a month. With automatic SSL/HTTPS as a bonus, and 
+Here in Spain we heve pretty decent fibre connections, 1Gbit/s symmetrical is quite frequent, 300/300Mbit/s is considered low-end, I have 10/10Gbit/s (with net data rates around 8Gbit/s) from DIGI, but a fixed IP is either not available or costs more money than the solution explained here. It would be shame let so much bandwidth go to waste. You could even host a small personal website or blog at home. All this is possible with this solution. 
+
+You might ask, I can use Dynamic DNS and Port forwarding, why shouldn't I do that? Well, this opens a portion, however small it could be of your home network to the Internet. Misconfigure it, and you might expose the wrong PC or some vulnerable part of your network. The proposed solution exposes only the machine at home you specifically choose, so you can put "public" apps on that machine, and keep the rest of your home network locked and reasonably secure.  
+
+Fear no more, as you can make your services - and only the ones you chose - available from the internet for a handful of €uros a month. With automatic SSL/HTTPS with Acme / LetsEncrypt as a bonus.  
 
 ## What do I need? 
 
@@ -79,10 +83,34 @@ I am assuming that you will run all commands as root or with ```sudo``` to have 
 8. Navigate to https://captain.yourdomain.com. You should see this screen:
 ![Screenshot 2023-12-18 at 18 42 45](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/e94a0398-4a3b-4435-990e-5b4df11ffdc2)
 9. If you successfully log in with the password that you set during step 7, you will see this screen:
-![Screenshot 2023-12-18 at 18 45 56](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/97cc708d-8f50-46b0-9763-c587e7923b61)
+![Screenshot 2023-12-18 at 18 53 48](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/03d1d87a-d52e-4536-a022-9e1b61715f4c)
+
 
 OK, done here. Back to the Homeserver. 
 
 ### At the Homeserver again
 
+The first thing you need is a web application to share. Let's assume, for simplicity that you have a Grafana instance running on your homeserver on port 3000 (the default) and want to access that Grafana instance from anywhere in the world. Make sure it's running and really works on that port. 
 
+### Back to the CapRover web interface. 
+
+1. On the sidabar of the web interface, click on "Apps"
+![Screenshot 2023-12-18 at 18 45 56](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/e8844ada-59f5-49b5-b33e-9cffaf4c9c5a)
+2. Click the "One-Click Apps/Databases" button.
+3. Select the "Nginx Reverse Proxy" app from the list that comes up
+![Screenshot 2023-12-18 at 18 57 28](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/5474ac20-6b22-49e7-b3cf-520f176f2606)
+4. Enter the required data in the next dialog:
+![Screenshot 2023-12-18 at 18 58 53](https://github.com/kerk1v/selfhosting-public-dynamic-ip/assets/16302524/4b167624-dc7c-4f6d-a409-92c3b58644c1)
+    1.  App Name: This will be the hostname part under which your app will be available, the complete URL will be https://<appname>.<yourdomain.com>. If you're not using a wildcard DNS entry, make sure you create the approprate DNS entry before hitting "Deploy" in step 4 below!
+    2.  Version: leave this field alone for now. It is the version of the image from Dockerhub that will be used.
+    3.  Upstream address: This will always start with http://10.8.0.10 (the IP of the Homeserver on the OpenVPN connection) followed by the port number it's listening on (in our case, :3000).
+    4.  Click "Deploy" at the bottom right of the page, and wait until it completes.
+    5.  Now navigate to the "Apps" screen again. Your newly created app will be there. Click on the name, we have two more settings to adjust.
+    6.  Click on the "Enable HTTPS" button. After some seconds, the button will be grayed out and the URL next to it will have changed to start with https://.
+    7.  Enable the checkbox "Force HTTPS by redirecting all HTTP traffic to HTTPS" and hit the "Save and Restart" button. You're done. Your Grafana app should now be accessible from the internet as https://grafana.<yourdomain.com>.
+  
+Proceed in the same way with any service running on your Homeserver or Homelab. The proposed Cloud server will easily handle dozens of them, the NginX image used is very lightweight and does not use much memory. As I said, if you outperform this server or run over the traffic limit of Hetzner Cloud, this is not the right solution for you. 
+
+In case you run into problems, please feel free to open an issue here on GitHub. I will do my best to help. For issues with CapRover please refer to their documentation at https://caprover.com/docs/get-started.html or their github repository / issues at https://github.com/caprover/caprover/issues. 
+
+Suggestions for improvements? Fork the repo, make your changes and create a Pull Request, or write in the "Issues" section. 
