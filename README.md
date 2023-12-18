@@ -29,7 +29,7 @@ Good, good, here are the steps, one by one...
         1. On OSX and Linux, check the directory  ~/.ssh for two files named `id_rsa` and `id_rsa.pub`. If they are there, you're good to go. If not, use the command ```ssh-keygen``` to generate a keypair (these two files)
         2. On Windows (10 and 11) you need to install the additional component called "SSH Client". After that, pretty much everything is the same as above.
         3. Upload the PUBLIC key into the Hetzner cloud server creation interface. Paste the contents of ``ìd_rsa.pub``` into that field, give it a memorable name and if you wish, check the box to make it the default key.
-        4. Don't forget to save the keypair (``ìd_rsa``` and ``ìd_rsa.pub```) in a safe place in case you ever format your PC. 
+        4. Don't forget to save the keypair (```id_rsa``` and ```id_rsa.pub```) in a safe place in case you ever format your PC. 
 2. Once the cloud instance is created, get to your DNS panel at your DNS provider and set up a DNS record pointing to the IP address of the cloud server you've just created. I use a wildcard entry, pointing any request to *.domain.com to the cloud instance, but for starters set up at least captain.domain.com. More on that later
 3. Login to the Cloud server you heve just created, normally the command will be ```ssh root@captain.domain.com```.
 4. Run the commands ```apt update && apt upgrade -y``` to apply the latest updates to the OS. Remember to do that once in a while to keep your OS up-to-date with the latest security patches. 
